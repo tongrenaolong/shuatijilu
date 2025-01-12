@@ -42,6 +42,9 @@ def before_request():
     if path in ['/register', '/','/login']:
         return
 
+    if path in ['/test/register', '/','/test/login']:
+        return
+
     # 其他路径检查登录状态
     if not verify_login():
         return render_template('home.html',data={"status_code":False,"message":"用户未登录"})
@@ -53,6 +56,27 @@ def index():
 @app.route('/login',methods=['POST'])
 def login():
     user_info = request.get_json()
+    password = hashlib.md5(user_info['password'].encode()).hexdigest()
+    user = db.session.query(User).filter(User.account == user_info['account'], User.password == password).first()
+    Logger().get_logger().info(f'result: {user}')
+
+    if user:
+        print("Login successful!")
+        session.permanent = True
+        user_id = user.user_id
+        Logger().get_logger().info(user.user_id)
+        user_info['user_id'] = user_id
+        session['user_info'] = user_info
+        Logger().get_logger().info("session[user_info]: ", session['user_info'])
+        return jsonify({'status_code': True, 'message': '登录成功', 'account': user_info['account']})
+    else:
+        print("Invalid username or password.")
+        return jsonify({'status_code': False, 'message': '登录失败', 'account': user_info['account']})
+
+@app.route('/test/login',methods=['POST'])
+def test_login():
+    user_info = request.get_json()
+    print(user_info)
     password = hashlib.md5(user_info['password'].encode()).hexdigest()
     user = db.session.query(User).filter(User.account == user_info['account'], User.password == password).first()
     Logger().get_logger().info(f'result: {user}')
@@ -150,7 +174,7 @@ def create_set():
         Logger().get_logger().error(f'{user_info}:{data} 创建题单失败; {e}')
         return jsonify({'status_code':False,'message':'创建题单失败'}),201
 
-@app.route('/get_sets', methods=['GET'])
+@app.route('/test/get_sets', methods=['GET'])
 def get_sets():
     user_info = get_user_info()
     # 通过 user_info 得到他加入的所有 problem_set
@@ -224,7 +248,7 @@ def get_set_problems():
         Logger().get_logger().error(e)
         return jsonify({'status_code':False,'message':'查询失败,请稍后重试'}),201
 
-@app.route('/delete_set_id',methods=['GET'])
+@app.route('/test/delete_set_id',methods=['GET'])
 def delete_set_id():
     user_info = get_user_info()
     user_id = user_info['user_id']

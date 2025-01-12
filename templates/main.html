@@ -319,53 +319,6 @@
     });
 
     // 监听模态框中的“确认”按钮点击事件
-    // document.getElementById('confirm-selection').addEventListener('click', function() {
-    //     const selectedSets = [];
-    //     // const checkboxes = document.querySelectorAll('.set-checkbox');
-    //     // checkboxes.forEach((checkbox)=>{
-    //     //     if(checkbox.checked){
-    //     //         selectedSets.push(checkbox.dataset.setId)
-    //     //     }
-    //     // });
-    //     document.querySelectorAll('.set-checkbox:checked').forEach(checkbox => {
-    //         selectedSets.push(checkbox.dataset.setId);
-    //     });
-    //     console.log('selectedSets: ',selectedSets)
-    //     if (selectedSets.length > 0) {
-    //         console.log('已选择的题单ID：', selectedSets);
-    //         // 在这里可以进行后续处理，如将选中的题单ID发送到后端
-    //         fetch(`/join_problem_set`,{
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify({
-    //                 'set_id_list':selectedSets,
-    //             })
-    //         }).then(response => response.json())  // 解析响应为 JSON
-    //             .then(data=>{
-    //                 if(data['status_code']){
-    //                     console.log('加入成功')
-    //                     getSets()
-    //                 }
-    //             }).catch(err=>{
-    //                 console.error(err)
-    //         })
-    //     } else {
-    //         // alert('请选择至少一个题单');
-    //         console.log('没有选择要加入的题单')
-    //     }
-    //
-    //     // 关闭模态框并清空数据
-    //     const searchResultModal = bootstrap.Modal.getInstance(document.getElementById('searchResultModal'));
-    //     searchResultModal.hide();
-    //
-    //     // 清空搜索框和搜索结果
-    //     document.getElementById('search-input').value = '';
-    //     document.getElementById('search-results').innerHTML = '';
-    // });
-
-    // 监听模态框中的“确认”按钮点击事件
 document.getElementById('confirm-selection').addEventListener('click', async function() {
     const selectedSets = [];
 
@@ -425,19 +378,6 @@ document.getElementById('confirm-selection').addEventListener('click', async fun
 });
 
     var current_set_id = -1;
-    // document.addEventListener('DOMContentLoaded', async () => {
-    //     getSets();
-    //     // <li className="nav-item"><a className="nav-link" href="#">{{account}}</a></li>
-    //     const response = await fetch('/get_user_info',{
-    //         method:'GET',
-    //     });
-    //     const responseData = response.json();
-    //     if(responseData['status_code']){
-    //         document.getElementById('account-link').textContent = responseData['user_info']['account'];
-    //     }else{
-    //         console.log('用户获取失败');
-    //     }
-    // });
         document.addEventListener('DOMContentLoaded', () => {
             getSets();
     });
