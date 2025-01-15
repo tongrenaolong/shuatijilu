@@ -200,7 +200,7 @@ def get_sets():
     Logger().get_logger().info(f'sets: {sets}')
     return jsonify({'status_code':True,'sets':sets}),201
 
-@app.route('/get_set_problems',methods=['GET'])
+@app.route('/test/get_set_problems',methods=['GET'])
 def get_set_problems():
     user_info = get_user_info()
     user_id = user_info['user_id']
@@ -284,7 +284,7 @@ def delete_set_id():
         Logger().get_logger().info(f"account: {user_info['account']},set_id: {set_id} 不存在")
         return jsonify({'status_code':True,'message':'用户并未加入此提单'}),201
 
-@app.route('/upload_solution',methods=['POST'])
+@app.route('/test/upload_solution',methods=['POST'])
 def upload_solution():
     user_info = get_user_info()
     user_id = user_info['user_id']
@@ -296,6 +296,7 @@ def upload_solution():
     # 获取 Base64 编码的图片数据
     base64_image = request.form.get('image_data')
     image_data = None
+    Logger().get_logger().info(f'{set_id},input_text: {input_text},status: {status}')
     if base64_image:
         # 可能会有 "data:image/png;base64," 的前缀，去除它
         if base64_image.startswith('data:image'):

@@ -385,7 +385,7 @@ document.getElementById('confirm-selection').addEventListener('click', async fun
     async function getSets() {
         try {
             // 发送请求到后端
-            const response = await fetch('/get_sets', {
+            const response = await fetch('/test/get_sets', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
