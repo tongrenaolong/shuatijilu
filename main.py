@@ -73,7 +73,7 @@ def login():
         print("Invalid username or password.")
         return jsonify({'status_code': False, 'message': '登录失败', 'account': user_info['account']})
 
-@app.route('/test/login',methods=['POST'])
+@app.route('/onlinerecord/login',methods=['POST'])
 def test_login():
     user_info = request.get_json()
     print(user_info)
@@ -114,11 +114,12 @@ def register():
 def main():
     return render_template('main.html')  # 返回 main.html 页面
 
-@app.route('/create_problems', methods=['POST'])
+@app.route('/onlinerecord/create_problems', methods=['POST'])
 def create_problems():
     user_info = get_user_info()
     user_id = user_info['user_id']
     data = request.get_json()
+    Logger().get_logger().info("data: ",data)
     set_id = data['set_id']
     try:
         for problem in data['questions']:
@@ -139,7 +140,7 @@ def create_problems():
         Logger().get_logger().error(f'新增题目失败; {e}')
         return jsonify({'status_code':False,'message':'新增题目失败'}),201
 
-@app.route('/create_set', methods=['POST'])
+@app.route('/onlinerecord/create_set', methods=['POST'])
 def create_set():
     user_info = get_user_info()
     data = request.get_json()
@@ -161,6 +162,7 @@ def create_set():
             if result is None:
                 Logger().get_logger().info(f'problem: {problem}')
                 problem_name = problem['problem_name']
+                Logger().get_logger().info(f'problem_name: {problem["problem_name"]}')
                 new_problem = Problems(problem_name=problem['problem_name'],link = problem['link'],set_id= new_set_id,difficulty=problem['difficulty'],user_id=user_info['user_id'])
                 db.session.add(new_problem)
                 db.session.flush()
@@ -174,7 +176,7 @@ def create_set():
         Logger().get_logger().error(f'{user_info}:{data} 创建题单失败; {e}')
         return jsonify({'status_code':False,'message':'创建题单失败'}),201
 
-@app.route('/test/get_sets', methods=['GET'])
+@app.route('/onlinerecord/get_sets', methods=['GET'])
 def get_sets():
     user_info = get_user_info()
     # 通过 user_info 得到他加入的所有 problem_set
@@ -200,7 +202,7 @@ def get_sets():
     Logger().get_logger().info(f'sets: {sets}')
     return jsonify({'status_code':True,'sets':sets}),201
 
-@app.route('/test/get_set_problems',methods=['GET'])
+@app.route('/onlinerecord/get_set_problems',methods=['GET'])
 def get_set_problems():
     user_info = get_user_info()
     user_id = user_info['user_id']
@@ -248,7 +250,7 @@ def get_set_problems():
         Logger().get_logger().error(e)
         return jsonify({'status_code':False,'message':'查询失败,请稍后重试'}),201
 
-@app.route('/test/delete_set_id',methods=['GET'])
+@app.route('/onlinerecord/delete_set_id',methods=['GET'])
 def delete_set_id():
     user_info = get_user_info()
     user_id = user_info['user_id']
@@ -284,7 +286,7 @@ def delete_set_id():
         Logger().get_logger().info(f"account: {user_info['account']},set_id: {set_id} 不存在")
         return jsonify({'status_code':True,'message':'用户并未加入此提单'}),201
 
-@app.route('/test/upload_solution',methods=['POST'])
+@app.route('/onlinerecord/upload_solution',methods=['POST'])
 def upload_solution():
     user_info = get_user_info()
     user_id = user_info['user_id']
@@ -316,7 +318,7 @@ def upload_solution():
         return jsonify({'status_code':False,'message':'打卡失败'}),201
 
 
-@app.route('/search_problem_sets',methods=['GET'])
+@app.route('/onlinerecord/search_problem_sets',methods=['GET'])
 def search_problem_sets():
     user_info = get_user_info()
     user_id = user_info['user_id']
@@ -370,7 +372,7 @@ def search_problem_sets():
     except Exception as e:
         return jsonify({'status_code': False,'message':'查找输出'}),201
 
-@app.route('/join_problem_set',methods=['POST'])
+@app.route('/onlinerecord/join_problem_set',methods=['POST'])
 def join_problem_set():
     user_info = get_user_info()
     user_id = user_info['user_id']
