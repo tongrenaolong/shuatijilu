@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yao.onlinerecord.mapper.UsersMapper">
+
+    <!-- 通用查询映射结果 -->
+<!--    BaseResultMap 标记数据库和实体类变量变量名称之间的映射关系，已经将查询结果封装进对应实体类中-->
+    <resultMap id="BaseResultMap" type="yao.onlinerecord.entity.Users">
+        <!--        column - property 表中列明，类中属性名-->
+        <id column="user_id" property="userId" />
+        <result column="account" property="account" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="created_at" property="createdAt" />
+    </resultMap>
+    <select id="GetUserList" resultType="yao.onlinerecord.entity.Users">
+        SELECT * FROM users;
+    </select>
+</mapper>

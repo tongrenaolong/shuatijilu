@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yao.onlinerecord.mapper.UserSubscriptionsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <!--    <resultMap id="ProblemsMap" type="mapper.ProblemsMapper">-->
+    <!--        &lt;!&ndash;        column - property 表中列明，类中属性名&ndash;&gt;-->
+    <!--        <result column="problem_id" property="problemId" />-->
+    <!--        <result column="problem_name" property="problemName" />-->
+    <!--        <result column="link" property="link" />-->
+    <!--        <result column="upload_time" property="uploadTime" />-->
+    <!--        <result column="difficulty" property="difficulty" />-->
+    <!--        <result column="user_id" property="userId" />-->
+    <!--        <result column="set_id" property="setId" />-->
+    <!--    </resultMap>-->
+    <!--    <select id="selectByProblemId" resultMap="ProblemsMap">-->
+    <!--        SELECT * FROM Problems WHERE problem_id = #{id}-->
+    <!--    </select>-->
+</mapper>
