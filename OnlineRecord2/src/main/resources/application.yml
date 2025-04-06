@@ -1,8 +1,0 @@
-spring:
-  application:
-    name: OnlineRecord
-  datasource:
-    url: jdbc:mysql://localhost:3306/OnlineRecord
-    username: root
-    password: Chenyx@1314
-    driver-class-name: com.mysql.cj.jdbc.Driver

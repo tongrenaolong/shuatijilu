@@ -1,19 +1,17 @@
 import base64
 import hashlib
-
-from flask import Flask, render_template, request, make_response, redirect, url_for, jsonify, session
+from flask import Flask, render_template, request, jsonify, session
 from sqlalchemy import func
-
-from model.User import User
-from utils.logger import Logger
-from model.problem_sets import ProblemSets
-from model.user_subscriptions import UserSubscriptions
-from model.problems import Problems
-from model.user_problem_status import UserProblemStatus
+from service.models.user import User
+from service.logger import Logger
+from service.models import ProblemSets
+from service.models.userSubscription import UserSubscriptions
+from service.models.problem import Problems
+from service.models.userProblemStatus import UserProblemStatus
 import secrets
 from datetime import timedelta
-from utils.web import get_user_info
-from model.database import Database,db
+from service.utils.web import get_user_info
+from service.models.database import Database,db
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)  # 将生成的随机密钥用于 Flask 配置
@@ -404,5 +402,16 @@ def get_account_info():
     print('user_info: ', user_info)
     return jsonify({'status_code':True,'message':'获取用户信息成功','user_id': user_info}),201
 
-if __name__=='__main__':
+# if __name__=='__main__':
     app.run(debug=True)
+
+from service.server import Server
+from service.utils.fun import load_router
+
+app = Server.get_app()
+# command
+load_router(app, ROUTES)
+
+if __name__ == "__main__":
+    # web 加载 router
+    app.run(host=SERVER_IP, port=SERVER_PORT)
