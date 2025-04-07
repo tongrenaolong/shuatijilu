@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """公共函数库"""
+import hashlib
 import sys
 import time
 from json import JSONEncoder
@@ -81,3 +82,6 @@ def json_dumps(data, *args, **kwargs):
     kwargs.setdefault("encoding", None)
     kwargs.setdefault('ignore_nan', True)
     return simplejson.dumps(data, *args, **kwargs)
+
+def md5(str):
+    return hashlib.md5(str.encode()).hexdigest()

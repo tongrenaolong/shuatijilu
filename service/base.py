@@ -3,20 +3,22 @@
 import json
 from decimal import Decimal
 from flask import make_response, request, current_app
-from utils.fun import get_datetime
+from service.utils.fun import get_datetime,str_escape
 
 class Base:
     """基础类"""
     user_lang = 'ZH'
-    message = None
-    post_data = None
+    # message = None
     logger_obj = None
-    request_method = None
-    client_ip = None
+    method = None
+    ip = None
+    user_agent = None
+    request_args = None
+    post_data = None
 
     def __init__(self):
         # set default Language
-        self.message = current_app.config['MESSAGE']
+        # self.message = current_app.config['MESSAGE']
         request_type = request.content_type
         if request_type and 'application/json' in request_type:
             # json
@@ -30,12 +32,13 @@ class Base:
             data = data_files = None
 
         self.post_data = data
-        self.request_method = request.method
+        self.method = request.method
         self.request_args = request.args if request.args else {}
-        self.request_files = data_files
+        # self.request_files = data_files
         self.logger_obj = current_app.config['logger_obj']
-        self.client_ip = request.remote_addr
+        self.ip = request.remote_addr
         port = request.host.split(':')[1] if ':' in request.host else ''
+        self.user_agent = str_escape(request.headers.get('User-Agent'))
         self.base_url = "https" + '://' + \
             request.host.split(':')[0] + (':' + port if port else '')
 

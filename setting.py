@@ -28,4 +28,5 @@ LOG_DIR = os.getenv("LOG_DIR", "")
 if "" == LOG_DIR:
     LOG_DIR = ROOT + "/log"
 URL_DEFAULT_PREFIX = os.getenv("URL_DEFAULT_PREFIX", "").strip("/")
+DEBUG = os.getenv("DEBUG", "")
 

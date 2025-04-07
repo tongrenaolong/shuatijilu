@@ -8,8 +8,8 @@ class Main():
         if cls.db:
             return cls.db
         else:
-            from service.utils import Server
-            from models.initModel import DbBase
+            from service.server import Server
+            from service.models.initModel import DbBase
             cls.db = DbBase(Server.get_app())
             return cls.db
 
