@@ -15,16 +15,14 @@ class BaseHandler(Base):
     """基础操作类"""
     id = None
     account = None
-    password = None
     username = None
     def __init__(self):
         super().__init__()
         session.modified = True
         self.id = session.get('id', None)
         self.account = session.get('account', "")
-        self.password = session.get('password', "")
         self.username = session.get('username', "")
-        self.activate_set_id = session.get('activate_set_id', None)
+        print(f'baseHandler session: ',session)
 
     # @staticmethod
     # def login_required(f):

@@ -11,7 +11,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 DATABASE_HOST = os.getenv("DATABASE_HOST", None)
 DATABASE_USER = os.getenv("DATABASE_USER", None)
 DATABASE_PORT = int(os.getenv("DATABASE_PORT"))
-DATABASE_PASSWORD = os.getenv("DATABASE_PSWD", None)
+DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD", None)
 DATABASE_NAME = os.getenv("DATABASE_NAME", None)
 # --------databases-----------
 MYSQL_URL = 'mysql+pymysql://' + \

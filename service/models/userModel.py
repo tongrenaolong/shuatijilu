@@ -9,7 +9,7 @@ class UserModel(db.Model,BaseModel):
     account = db.Column(db.String(100))
     password = db.Column(db.String(255))
     username = db.Column(db.String(100))
-    creat_time = db.Column(db.DateTime)
+    create_time = db.Column(db.DateTime)
 
     def __repr__(self):
         return f'<User {self.user_id},{self.account},{self.username},{self.password},{self.created_at}>'

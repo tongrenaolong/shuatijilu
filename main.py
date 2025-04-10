@@ -9,4 +9,4 @@ load_router(app, ROUTES)
 
 if __name__ == "__main__":
     # web 加载 router
-    app.run(host=SERVER_HOST, port=SERVER_PORT)
+    app.run(host=SERVER_HOST, port=SERVER_PORT,debug=True)
