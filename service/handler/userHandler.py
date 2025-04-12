@@ -10,7 +10,11 @@ class UserHandler(BaseHandler):
         post_data = obj.post_data
         account = post_data.get('account')
         password = md5(post_data.get('password'))
-        user = UserModel.get_one_where(conditions={'account': account, 'password': password})
+        user = UserModel.get_one_where(
+            conditions={
+                'account': account, 
+                'password': password
+            })
         # Logger().get_logger().info(f'result: {user}')
         # 记录日志
         # obj.logger_obj.normal_log(
@@ -19,7 +23,7 @@ class UserHandler(BaseHandler):
         #     ip=obj.ip,
         #     user_agent=obj.user_agent,
         #     desc="",
-        #     uid=obj.id,
+        #     uid=obj.user_id,
         #     is_access=1
         # )
 
@@ -30,8 +34,8 @@ class UserHandler(BaseHandler):
             # user_info['user_id'] = user_id
             # session['user_info'] = user_info
             # Logger().get_logger().info("session[user_info]: ", session['user_info'])
-            session.permanent = True
-            session['id'] = user['id']
+            # session.permanent = True
+            session['user_id'] = user['id']
             session['account'] = user['account']
             session['username'] = user['username']
             session.modified = True

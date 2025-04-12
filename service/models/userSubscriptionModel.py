@@ -2,8 +2,8 @@ from service.model import db
 from service.models.baseModel import BaseModel
 
 # 订阅表
-class UserSubscriptionsModel(db.Model,BaseModel):
-    __tablename__ = 'UserSubscriptions'
+class UserSubscriptionModel(db.Model,BaseModel):
+    __tablename__ = 'UserSubscription'
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)

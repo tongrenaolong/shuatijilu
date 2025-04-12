@@ -87,7 +87,7 @@ class BaseModel():
 
             return new_record
         except Exception as e:
-            print("add errror", str(e))
+            print("add error", str(e))
             db.session.rollback()
             return False
 

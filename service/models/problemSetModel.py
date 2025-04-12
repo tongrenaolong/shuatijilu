@@ -6,7 +6,6 @@ class ProblemSetModel(db.Model,BaseModel):
     __tablename__ = 'ProblemSet'
 
     id = db.Column(db.Integer, primary_key=True)
-    set_id = db.Column(db.Integer)
     set_name = db.Column(db.String(100))
     create_time = db.Column(db.DateTime)
     description = db.Column(db.Text)

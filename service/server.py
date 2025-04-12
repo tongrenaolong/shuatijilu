@@ -19,8 +19,8 @@ class Server():
             token = secrets.token_hex(32)
             app.secret_key = token
             app.config['SECRET_KEY'] = token
-            app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(
-                days=1)  # 配置20
+            app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=1)
+            app.config['PARMANENT'] = False
             app.config['SQLALCHEMY_DATABASE_URI'] = MYSQL_URL
             app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
             app.config['logger_obj'] = LogsServer.get_obj()

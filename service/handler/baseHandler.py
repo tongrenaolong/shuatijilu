@@ -13,13 +13,14 @@ from service.base import Base
 
 class BaseHandler(Base):
     """基础操作类"""
-    id = None
+    user_id = None
     account = None
     username = None
+
     def __init__(self):
         super().__init__()
         session.modified = True
-        self.id = session.get('id', None)
+        self.user_id = session.get('user_id', None)
         self.account = session.get('account', "")
         self.username = session.get('username', "")
         print(f'baseHandler session: ',session)

@@ -29,4 +29,7 @@ if "" == LOG_DIR:
     LOG_DIR = ROOT + "/log"
 URL_DEFAULT_PREFIX = os.getenv("URL_DEFAULT_PREFIX", "").strip("/")
 DEBUG = os.getenv("DEBUG", "")
-
+CELERY_BROKER = os.getenv("CELERY_BROKER", "")
+CELERY_BACKEND = os.getenv("CELERY_BACKEND", "")
+AI_API_KEY = os.getenv("AI_API_KEY", "")
+AI_URL = os.getenv("AI_URL", "")
