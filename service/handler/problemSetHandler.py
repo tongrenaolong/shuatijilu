@@ -37,13 +37,12 @@ class ProblemSetHandler(BaseHandler):
     def get_problem_sets(cls):
         obj = cls()
         user_id = obj.user_id
-        print(session)
-        print(f'user_id: {user_id}')
-        set_id_list = UserSubscriptionModel.get_where(
+        user_subscription_ret = UserSubscriptionModel.get_where(
             conditions={
                 "user_id": user_id
-            }
+            },
         )
+        set_id_list = [sub['set_id'] for sub in user_subscription_ret]
         set_problem_list = ProblemSetModel.get_where(
             conditions={
                 'id':  ['in', set_id_list]

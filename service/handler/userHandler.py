@@ -12,7 +12,7 @@ class UserHandler(BaseHandler):
         password = md5(post_data.get('password'))
         user = UserModel.get_one_where(
             conditions={
-                'account': account, 
+                'account': account,
                 'password': password
             })
         # Logger().get_logger().info(f'result: {user}')
@@ -28,13 +28,6 @@ class UserHandler(BaseHandler):
         # )
 
         if user:
-            # session.permanent = True
-            # user_id = user.user_id
-            # Logger().get_logger().info(user.user_id)
-            # user_info['user_id'] = user_id
-            # session['user_info'] = user_info
-            # Logger().get_logger().info("session[user_info]: ", session['user_info'])
-            # session.permanent = True
             session['user_id'] = user['id']
             session['account'] = user['account']
             session['username'] = user['username']

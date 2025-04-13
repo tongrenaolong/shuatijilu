@@ -17,6 +17,8 @@ ROUTES = [
      'view_func': ProblemHandler.get_problems, 'methods': ['GET']},
     {'url': '/problem/update_status',
      'view_func': ProblemHandler.update_status, 'methods': ['POST']},
+    {'url': '/problem/get_problem_status',
+     'view_func': ProblemHandler.get_problem_status, 'methods': ['POST']},
 
     # 题单
     {'url': '/set/create_problem_set',
@@ -29,8 +31,4 @@ ROUTES = [
      'view_func': ProblemSetHandler.search_problem_set_name, 'methods': ['POST']},
     {'url': '/set/join_problem_set',
      'view_func': ProblemSetHandler.join_problem_set, 'methods': ['POST']},
-
-    # 后台任务
-    {'url': '/task/create_review_plan',
-     'view_func': TestTask.test_task,'methods': ['POST']},
 ]

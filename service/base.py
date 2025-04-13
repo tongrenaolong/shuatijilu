@@ -12,6 +12,7 @@ class Base:
     logger_obj = None
     method = None
     ip = None
+    url = None
     user_agent = None
     request_args = None
     post_data = None
@@ -35,12 +36,15 @@ class Base:
         self.method = request.method
         self.request_args = request.args if request.args else {}
         # self.request_files = data_files
-        self.logger_obj = current_app.config['logger_obj']
+        # self.logger_obj = current_app.config['logger_obj']
         self.ip = request.remote_addr
         port = request.host.split(':')[1] if ':' in request.host else ''
         self.user_agent = str_escape(request.headers.get('User-Agent'))
         self.base_url = "https" + '://' + \
             request.host.split(':')[0] + (':' + port if port else '')
+        # 获取完整的请求URL
+        self.url = request.url
+        self.path = request.path
 
     def r(self, data=None, code=200, message_type='sys', return_type='json', msg=None):
         """front return
@@ -57,12 +61,12 @@ class Base:
         if not data:
             data = []
         message_type = str(message_type.lower())
-        if msg is None:
-            msg = self.message[message_type][self.user_lang][str(code)] \
-                if message_type in self.message and \
-                self.user_lang in self.message[message_type] and \
-                str(code) in self.message[message_type][self.user_lang] \
-                else "Unkonwn " + str(message_type) + " " + self.user_lang
+        # if msg is None:
+        #     msg = self.message[message_type][self.user_lang][str(code)] \
+        #         if message_type in self.message and \
+        #         self.user_lang in self.message[message_type] and \
+        #         str(code) in self.message[message_type][self.user_lang] \
+        #         else "Unkonwn " + str(message_type) + " " + self.user_lang
         if 'json' == return_type:
             data = self.convert_decimals(data)
             json_data = json.dumps({

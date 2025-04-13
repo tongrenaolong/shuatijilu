@@ -33,3 +33,7 @@ CELERY_BROKER = os.getenv("CELERY_BROKER", "")
 CELERY_BACKEND = os.getenv("CELERY_BACKEND", "")
 AI_API_KEY = os.getenv("AI_API_KEY", "")
 AI_URL = os.getenv("AI_URL", "")
+SMTP_SERVER = os.getenv("SMTP_SERVER", "")
+SMTP_PORT = os.getenv("SMTP_PORT", 465)
+EMAIL_ADDR = os.getenv("EMAIL_ADDR", "")
+AUTHORIZATION_CODE = os.getenv("AUTHORIZATION_CODE", "") # 授权码

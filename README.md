@@ -53,6 +53,15 @@
 
 找到自己想加入到题单，**勾选并点击加入**即可。
 
+### 项目启动
+#### 后台任务
+```shell
+# worker
+celery -A service.back_work.tasks worker --loglevel=info -P solo
+# 执行定时任务
+celery -A service.back_work.tasks beat --loglevel=info
+
+```
 ----
 
 **如果各位有更多的想法或者发现BUG可以发送邮箱至(3300763927@qq.com)，欢迎使用我的网站！！！**

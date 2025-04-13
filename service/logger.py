@@ -38,9 +38,10 @@
 
 from flask_login import current_user
 from service.utils.fun import str_escape
-# from applications.models import AdminLog
+from service.models.userOperationLogModel import UserOperationLogModel
+from service.base import Base
 
-class LogsServer():
+class LogsServer(Base):
     obj = None
     @classmethod
     def get_obj(cls):
@@ -49,7 +50,8 @@ class LogsServer():
             cls.obj = cls()
         return cls.obj
 
-    def normal_log(self,method, url, ip, user_agent, desc, uid, is_access):
+    @classmethod
+    def normal_log(cls, user_id,user_permission=0):
         """
         记录通用日志信息到数据库。
 
@@ -62,57 +64,50 @@ class LogsServer():
         :param is_access: 是否成功访问（True 或 False）。
         :return: 返回日志记录的 ID。
         """
+        obj = cls()
         info = {
-            'method': method,
-            'url': url,
-            'ip': ip,
-            'user_agent': user_agent,
-            'desc': desc,
-            'uid': uid,
-            'success': int(is_access)
+            'user_id': user_id,
+            'method': obj.method,
+            'url': obj.url,
+            'ip': obj.ip,
+            'user_agent': obj.user_agent,
+            'user_permission':user_permission
         }
-        log = AdminLog(
-            url=info.get('url'),
-            ip=info.get('ip'),
-            user_agent=info.get('user_agent'),
-            desc=info.get('desc'),
-            uid=info.get('uid'),
-            method=info.get('method'),
-            success=info.get('success')
-        )
-        # 将日志加入数据库
-        return log.id
-
-    def login_log(self,request, uid, is_access):
-        """
-        记录用户登录日志。
-
-        :param request: Flask 请求对象。
-        :param uid: 用户 ID。
-        :param is_access: 是否成功登录（True 或 False）。
-        :return: 返回日志记录的 ID。
-        """
-        method = request.method
-        url = request.path
-        ip = request.remote_addr
-        user_agent = str_escape(request.headers.get('User-Agent'))
-        desc = str_escape(request.form.get('username'))
-        return normal_log(method, url, ip, user_agent, desc, uid, is_access)
-
-    def admin_log(self,request, is_access, desc=None):
-        """
-        记录管理员操作日志。
-
-        :param request: Flask 请求对象。
-        :param is_access: 是否成功操作（True 或 False）。
-        :param desc: 日志描述信息（可选）。如果未提供，则从请求数据中提取。
-        :return: 返回日志记录的 ID。
-        """
-        method = request.method
-        url = request.path
-        ip = request.remote_addr
-        user_agent = str_escape(request.headers.get('User-Agent'))
-        request_data = request.json if request.headers.get('Content-Type') == 'application/json' else request.values
-        if desc is None:
-            desc = str_escape(str(dict(request_data)))
-        return normal_log(method, url, ip, user_agent, desc, current_user.id, is_access)
+        log_id = UserOperationLogModel.add_new(info)
+        return log_id
+    #
+    # @classmethod
+    # def login_log(cls,request, uid, is_access):
+    #     """
+    #     记录用户登录日志。
+    #
+    #     :param request: Flask 请求对象。
+    #     :param uid: 用户 ID。
+    #     :param is_access: 是否成功登录（True 或 False）。
+    #     :return: 返回日志记录的 ID。
+    #     """
+    #     method = request.method
+    #     url = request.path
+    #     ip = request.remote_addr
+    #     user_agent = str_escape(request.headers.get('User-Agent'))
+    #     desc = str_escape(request.form.get('username'))
+    #     return normal_log(method, url, ip, user_agent, desc, uid, is_access)
+    #
+    # @classmethod
+    # def admin_log(cls,request, is_access, desc=None):
+    #     """
+    #     记录管理员操作日志。
+    #
+    #     :param request: Flask 请求对象。
+    #     :param is_access: 是否成功操作（True 或 False）。
+    #     :param desc: 日志描述信息（可选）。如果未提供，则从请求数据中提取。
+    #     :return: 返回日志记录的 ID。
+    #     """
+    #     method = request.method
+    #     url = request.path
+    #     ip = request.remote_addr
+    #     user_agent = str_escape(request.headers.get('User-Agent'))
+    #     request_data = request.json if request.headers.get('Content-Type') == 'application/json' else request.values
+    #     if desc is None:
+    #         desc = str_escape(str(dict(request_data)))
+    #     return normal_log(method, url, ip, user_agent, desc, current_user.id, is_access)

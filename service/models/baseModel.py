@@ -63,7 +63,7 @@ class BaseModel():
         """通过ID 更新数据"""
         try:
             condition = {
-                "ID": data_id
+                "id": data_id
             }
             updated_count = cls.query.filter_by(**condition).update(data)
             if updated_count:
