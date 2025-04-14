@@ -2,6 +2,8 @@ from service.handler.problemSetHandler import ProblemSetHandler
 from service.handler.userHandler import UserHandler
 from service.handler.problemHandler import ProblemHandler
 from service.back_work.taskHandler import TestTask
+from service.rpc.ai_rpc import AiRPCService
+from service.rpc.email_rpc import EmailRPC
 
 ROUTES = [
     # 用户
