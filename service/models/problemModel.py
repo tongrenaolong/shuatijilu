@@ -11,6 +11,4 @@ class ProblemModel(db.Model, BaseModel):
     difficulty = db.Column(db.Integer)
     user_id = db.Column(db.Integer)
     set_id = db.Column(db.Integer)
-
-    def __repr__(self):
-        return f'<Problem(id={self.id}, name={self.problem_name}, difficulty={self.difficulty})>'
+    type_id = db.Column(db.Integer)

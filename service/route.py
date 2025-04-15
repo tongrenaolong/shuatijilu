@@ -1,6 +1,7 @@
 from service.handler.problemSetHandler import ProblemSetHandler
 from service.handler.userHandler import UserHandler
 from service.handler.problemHandler import ProblemHandler
+from service.handler.problemTypeHandler import ProblemTypeHandler
 from service.back_work.taskHandler import TestTask
 from service.rpc.ai_rpc import AiRPCService
 from service.rpc.email_rpc import EmailRPC
@@ -33,4 +34,13 @@ ROUTES = [
      'view_func': ProblemSetHandler.search_problem_set_name, 'methods': ['POST']},
     {'url': '/set/join_problem_set',
      'view_func': ProblemSetHandler.join_problem_set, 'methods': ['POST']},
+
+    # 管理员操作
+    {'url': '/admin/problem_type/create_problem_type',
+     'view_func': ProblemTypeHandler.create_problem_type,'methods': ['POST']},
+    {'url': '/admin/problem_type/delete_problem_type',
+     'view_func': ProblemTypeHandler.delete_problem_type,'methods': ['POST']},
+    {'url': '/admin/problem_type/update_problem_type',
+     'view_func': ProblemTypeHandler.update_problem_type,'methods': ['POST']},
+
 ]
