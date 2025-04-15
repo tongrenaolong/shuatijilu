@@ -1,0 +1,7 @@
+.env
+*.bak
+*.dat
+*.dir
+*.idea
+*.iml
+*.pyc
