@@ -42,5 +42,4 @@ ROUTES = [
      'view_func': ProblemTypeHandler.delete_problem_type,'methods': ['POST']},
     {'url': '/admin/problem_type/update_problem_type',
      'view_func': ProblemTypeHandler.update_problem_type,'methods': ['POST']},
-
 ]

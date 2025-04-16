@@ -12,3 +12,7 @@ def create_review_plan():
 @app.task(name='send_review_plan_email')
 def send_review_plan_email():
     EmailRPC.send_review_plan_email()
+
+@app.task(name='send_auth_code_reminder')
+def send_auth_code_reminder():
+    EmailRPC.send_auth_code_reminder()

@@ -4,6 +4,7 @@ from service.utils.fun import get_datetime
 from service.models.userSubscriptionModel import UserSubscriptionModel
 from service.models.userProblemLogModel import UserProblemLogModel
 from service.models.userProblemModel import UserProblemModel
+from service.models.problemTypeModel import ProblemTypeModel
 
 class ProblemHandler(BaseHandler):
     @classmethod
@@ -22,21 +23,46 @@ class ProblemHandler(BaseHandler):
         print('user_set_status: ',user_set_status)
         if user_set_status['authority'] == 0:
             return obj.r(msg="请联系管理员进行操作",code=200)
+            
         problem_id_list = []
+        error_list = []  # 记录验证失败的题目
+        
         for problem in data['problem_list']:
-            res_problem = ProblemModel.get_one_where(conditions={
-                'user_id': user_id,
-                'set_id': set_id,
-                'link': problem['link']
-            })
-            if res_problem:
+            # 验证题目类型是否存在
+            type_exists = ProblemTypeModel.get_one_where(
+                conditions={
+                    'type_id': problem['type_id']
+                }
+            )
+            if not type_exists:
+                error_list.append({
+                    'problem_name': problem['problem_name'],
+                    'reason': f'题目类型 {problem["type_id"]} 不存在'
+                })
                 continue
+                
+            # 验证题目是否已存在
+            res_problem = ProblemModel.get_one_where(
+                conditions={
+                    'user_id': user_id,
+                    'set_id': set_id,
+                    'link': problem['link']
+                }
+            )
+            if res_problem:
+                error_list.append({
+                    'problem_name': problem['problem_name'],
+                    'reason': '题目链接已存在'
+                })
+                continue
+                
             # 新增题目
             problem_id = ProblemModel.add_new(
                 data={
                     'problem_name': problem['problem_name'],
                     'link': problem['link'],
                     'difficulty': problem['difficulty'],
+                    'type_id': problem['type_id'],  # 添加题目类型ID
                     'user_id': user_id,
                     'set_id': set_id,
                     'create_time': get_datetime()
@@ -50,8 +76,7 @@ class ProblemHandler(BaseHandler):
             },
             return_fields=['user_id']
         )
-        print(f'problem_id_list: {problem_id_list}, user_id_list: {user_id_list}')
-        # 更新每个用户对应的题目状态
+        
         for tem_user_id in user_id_list:
             for problem_id in problem_id_list:
                 UserProblemModel.add_new(
@@ -63,7 +88,13 @@ class ProblemHandler(BaseHandler):
                         'update_time': get_datetime()
                     }
                 )
-        return obj.r(msg='创建成功',code=200)
+                
+        return obj.r(msg='创建成功', 
+                    code=200, 
+                    data={
+                        'success_count': len(problem_id_list),
+                        'error_list': error_list if error_list else None
+                    })
 
     @classmethod
     def get_problems(cls):
@@ -143,3 +174,123 @@ class ProblemHandler(BaseHandler):
         if not add_result or not update_result:
             return obj.r(msg='更新失败',code=807)
         return obj.r(msg='更新成功',code=200)
+
+    @classmethod
+    def update_problem(cls):
+        """批量更新题目信息"""
+        obj = cls()
+        user_id = obj.user_id
+        data = obj.post_data
+        
+        try:
+            set_id = int(data.get('set_id'))
+            problem_list = data.get('problem_list', [])
+        except (ValueError, TypeError):
+            return obj.r(msg="参数类型错误", code=807)
+            
+        if not problem_list:
+            return obj.r(msg="题目列表不能为空", code=807)
+            
+        # 验证用户权限
+        user_set_status = UserSubscriptionModel.get_one_where(
+            conditions={
+                "user_id": user_id,
+                "set_id": set_id
+            }
+        )
+        if not user_set_status or user_set_status['authority'] == 0:
+            return obj.r(msg="没有修改权限", code=807)
+            
+        success_list = []
+        error_list = []
+        
+        for problem in problem_list:
+            # 验证必填字段
+            if 'problem_id' not in problem:
+                error_list.append({
+                    'problem_name': problem.get('problem_name', '未知'),
+                    'reason': '缺少必填字段 problem_id'
+                })
+                continue
+                
+            # 获取当前题目信息
+            current_problem = ProblemModel.get_one_where(
+                conditions={
+                    'id': problem['problem_id'],
+                    'set_id': set_id
+                }
+            )
+            if not current_problem:
+                error_list.append({
+                    'problem_id': problem['problem_id'],
+                    'reason': '题目不存在或不属于该题单'
+                })
+                continue
+                
+            # 构建更新数据
+            update_data = {}
+            
+            # 处理选填字段
+            if 'problem_name' in problem:
+                update_data['problem_name'] = problem['problem_name']
+            if 'link' in problem:
+                update_data['link'] = problem['link']
+            if 'difficulty' in problem:
+                try:
+                    update_data['difficulty'] = int(problem['difficulty'])
+                except (ValueError, TypeError):
+                    error_list.append({
+                        'problem_id': problem['problem_id'],
+                        'reason': '难度值必须为整数'
+                    })
+                    continue
+            if 'type_id' in problem:
+                try:
+                    type_id = int(problem['type_id'])
+                    # 验证题目类型是否存在
+                    type_exists = ProblemTypeModel.get_one_where(
+                        conditions={
+                            'id': type_id
+                        }
+                    )
+                    if not type_exists:
+                        error_list.append({
+                            'problem_id': problem['problem_id'],
+                            'reason': f'题目类型 {type_id} 不存在'
+                        })
+                        continue
+                    update_data['type_id'] = type_id
+                except (ValueError, TypeError):
+                    error_list.append({
+                        'problem_id': problem['problem_id'],
+                        'reason': '类型ID必须为整数'
+                    })
+                    continue
+            
+            # 如果没有需要更新的字段，跳过
+            if not update_data:
+                continue
+                
+            # 更新题目
+            result = ProblemModel.update_by_id(
+                data=update_data,
+                data_id=problem['problem_id']
+            )
+            
+            if result:
+                success_list.append(problem['problem_id'])
+            else:
+                error_list.append({
+                    'problem_id': problem['problem_id'],
+                    'reason': '更新失败'
+                })
+                
+        return obj.r(
+            msg='处理完成',
+            code=200,
+            data={
+                'success_count': len(success_list),
+                'success_list': success_list,
+                'error_list': error_list if error_list else None
+            }
+        )
