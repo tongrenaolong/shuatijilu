@@ -165,3 +165,30 @@ class ProblemTypeHandler(BaseHandler):
             "success_list": success_list,
             "error_list": error_list
         })
+
+    @classmethod
+    def get_all_children_types(cls):
+        """递归获取以type_id为父节点的所有类型"""
+        obj = cls()
+        args = obj.request_args
+        type_id = args.get('type_id')
+        if not type_id:
+            return obj.r(msg="缺少type_id参数", code=807)
+        try:
+            type_id = int(type_id)
+        except Exception:
+            return obj.r(msg="type_id参数格式错误", code=807)
+
+        def get_children(parent_id):
+            children = ProblemTypeModel.get_where(
+                conditions={'parent_type_id': parent_id}
+            )
+            result = []
+            for child in children:
+                # 递归查找子节点
+                child['children'] = get_children(child['id'])
+                result.append(child)
+            return result
+
+        all_children = get_children(type_id)
+        return obj.r(msg="查询成功", code=200, data=all_children)

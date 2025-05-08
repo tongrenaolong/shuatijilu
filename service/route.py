@@ -2,7 +2,6 @@ from service.handler.problemSetHandler import ProblemSetHandler
 from service.handler.userHandler import UserHandler
 from service.handler.problemHandler import ProblemHandler
 from service.handler.problemTypeHandler import ProblemTypeHandler
-from service.back_work.taskHandler import TestTask
 from service.rpc.ai_rpc import AiRPCService
 from service.rpc.email_rpc import EmailRPC
 
@@ -42,4 +41,6 @@ ROUTES = [
      'view_func': ProblemTypeHandler.delete_problem_type,'methods': ['POST']},
     {'url': '/admin/problem_type/update_problem_type',
      'view_func': ProblemTypeHandler.update_problem_type,'methods': ['POST']},
+    # {'url': '/admin/problem_type/list_problem_types',
+    #  'view_func': ProblemTypeHandler.list_problem_types,'methods': ['POST']},
 ]
